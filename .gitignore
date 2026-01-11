@@ -1,0 +1,23 @@
+# Unity generated
+*.csproj
+*.sln
+*.suo
+*.user
+*.pidb
+*.booproj
+
+# Build results
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS generated
+.DS_Store
+Thumbs.db
