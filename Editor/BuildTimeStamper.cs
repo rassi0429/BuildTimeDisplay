@@ -31,7 +31,7 @@ public class BuildTimeStamper : IVRCSDKBuildRequestedCallback
         double unixTimestamp = (now - epoch).TotalSeconds;
         
         // ローカル時刻の文字列
-        string timeString = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+        string timeString = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
         
         // シーン内の全BuildTimeDisplayを検索
         var scene = SceneManager.GetActiveScene();

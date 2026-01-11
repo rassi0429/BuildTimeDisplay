@@ -14,18 +14,22 @@ public class BuildTimeDisplay : UdonSharpBehaviour
     [Tooltip("表示を更新する間隔（秒）")]
     public float updateInterval = 1f;
     
-    [Tooltip("表示フォーマット（{0}に経過時間が入ります）")]
-    public string displayFormat = "ビルド: {0}前";
-    
+    [Tooltip("表示フォーマット（{0}にビルド日時、{1}に経過時間が入ります）")]
+    [TextArea(2, 4)]
+    public string displayFormat = "最後のビルド {0}\n{1}前";
+
+    [Tooltip("1日以上経過時のフォーマット")]
+    public string dayFormat = "{0}日{1}時間";
+
     [Tooltip("1時間以上経過時のフォーマット")]
     public string hourFormat = "{0}時間{1}分";
-    
+
     [Tooltip("1時間未満のフォーマット")]
     public string minuteFormat = "{0}分";
-    
+
     [Tooltip("1分未満のフォーマット")]
     public string secondFormat = "{0}秒";
-    
+
     [Header("自動設定（Editor拡張が設定）")]
     [Tooltip("ビルド時のUnixタイムスタンプ（秒）- Editorが自動設定")]
     public double buildTimestamp = 0;
@@ -78,22 +82,17 @@ public class BuildTimeDisplay : UdonSharpBehaviour
         {
             return "ビルド時刻未設定";
         }
-        
-        // VRChatサーバー時間を取得（Unixタイムスタンプ相当）
-        double serverTime = Networking.GetServerTimeInSeconds();
-        
-        // ローカルの基準時刻を使用（GetServerTimeInSecondsは起動からの経過秒数）
-        // 代わりにDateTime.UtcNowを使用
+
         double currentUnixTime = GetCurrentUnixTime();
         double elapsedSeconds = currentUnixTime - buildTimestamp;
-        
+
         if (elapsedSeconds < 0)
         {
             return "時刻同期中...";
         }
-        
+
         string elapsed = FormatDuration(elapsedSeconds);
-        return string.Format(displayFormat, elapsed);
+        return string.Format(displayFormat, buildTimeString, elapsed);
     }
     
     private double GetCurrentUnixTime()
@@ -111,11 +110,11 @@ public class BuildTimeDisplay : UdonSharpBehaviour
         int minutes = seconds / 60;
         int hours = minutes / 60;
         int days = hours / 24;
-        
+
         if (days > 0)
         {
             int remainingHours = hours % 24;
-            return $"{days}日{remainingHours}時間";
+            return string.Format(dayFormat, days, remainingHours);
         }
         else if (hours > 0)
         {
